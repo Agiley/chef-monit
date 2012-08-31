@@ -25,9 +25,20 @@ set mail-format {
 
 set alert <%= @node[:monit][:notify_email] %> NOT ON { action, instance, pid, ppid }
 
-set httpd port 3737 and
-    use address localhost
-    allow localhost
+set httpd port <%= @node[:monit][:webserver][:port] %>
+<% if @node[:monit][:webserver][:bind_to_localhost] %>
+  and use address localhost
+<% end %>
 
-include /etc/monit/conf.d/*.conf
+<% if @node[:monit][:webserver][:allowed_connections] %>
+  <% @node[:monit][:webserver][:allowed_connections].each do |allowed_connection| %>
+    allow <%= allowed_connection %>
+  <% end %>
+<% end %>
+
+<% if @node[:monit][:include_paths] %>
+  <% @node[:monit][:include_paths].each do |include_path| %>
+    include <%= include_path %>
+  <% end %>
+<% end %>
 
