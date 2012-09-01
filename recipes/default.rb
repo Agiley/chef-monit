@@ -1,4 +1,7 @@
-package "monit"
+case node['monit']['install_method']
+  when 'source'   then  include_recipe 'monit::source'
+  when 'package'  then  package "monit"
+end
 
 if platform?("ubuntu")
   cookbook_file "/etc/default/monit" do
