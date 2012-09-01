@@ -12,9 +12,19 @@ if platform?("ubuntu")
   end
 
   # Working init script, fix for: https://bugs.launchpad.net/ubuntu/+source/monit/+bug/993381
+  #if node.platform_version.to_f == 12.04
+  #  cookbook_file "/etc/init.d/monit" do
+  #    source "monit.init.sh"
+  #    owner "root"
+  #    group "root"
+  #    mode 0755
+  #  end
+  #end
+  
+  # Working init script, fix for: https://bugs.launchpad.net/ubuntu/+source/monit/+bug/993381
   if node.platform_version.to_f == 12.04
-    cookbook_file "/etc/init.d/monit" do
-      source "monit.init.sh"
+    template "/etc/init.d/monit" do
+      source 'init/monit.init.sh.erb'
       owner "root"
       group "root"
       mode 0755

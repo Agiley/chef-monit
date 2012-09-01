@@ -5,6 +5,8 @@ include_recipe "build-essential"
 src_filepath  =   "#{Chef::Config['file_cache_path'] || '/tmp'}/monit-#{node['monit']['version']}.tar.gz"
 packages      =   ['libssl-dev', 'libpam0g-dev', 'libreadline-gplv2-dev']
 
+node.set['monit']['binary_path'] = "/usr/local/bin/monit"
+
 packages.each do |dev_pkg|
   package dev_pkg
 end
