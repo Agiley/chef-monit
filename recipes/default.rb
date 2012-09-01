@@ -23,8 +23,12 @@ if platform?("ubuntu")
 end
 
 if (node['monit']['install_method'] == 'source')
-  bash "start_monit_on_boot" do
-    code "update-rc.d monit defaults"
+  bash "after_setup_tasks" do
+    code <<-EOH
+      rm -rf /etc/monitrc
+      ln -s /etc/monit/monitrc /etc/monitrc
+      update-rc.d monit defaults
+    EOH
   end
 end
 
