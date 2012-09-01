@@ -28,6 +28,3 @@ bash "compile_monit_source" do
     chown -R #{node['monit']['source']['user']}:#{node['monit']['source']['group']} /etc/monit
   EOH
 end
-
-default[:monit][:source][:user]                     =   "root"
-default[:monit][:source][:group]                    =   "root"
