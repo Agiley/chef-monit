@@ -1,5 +1,6 @@
 default[:monit][:install_method]                    =   "package"
 default[:monit][:version]                           =   "5.4"
+default[:monit][:source][:configure_flags]          =   nil
 
 default[:monit][:notify_email]                      =   "notify@example.com"
 
