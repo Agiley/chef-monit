@@ -23,5 +23,11 @@ bash "compile_monit_source" do
     tar zxf #{::File.basename(src_filepath)} -C #{::File.dirname(src_filepath)}
     cd monit-#{node['monit']['version']} && ./configure #{configure_flags}
     make && make install
+    mkdir -p /etc/monit/conf.d/
+    chown #{node['monit']['source']['user']}:#{node['monit']['source']['group']} /etc/default/monit
+    chown -R #{node['monit']['source']['user']}:#{node['monit']['source']['group']} /etc/monit
   EOH
 end
+
+default[:monit][:source][:user]                     =   "root"
+default[:monit][:source][:group]                    =   "root"

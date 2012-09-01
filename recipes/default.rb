@@ -22,6 +22,12 @@ if platform?("ubuntu")
   end
 end
 
+if (node['monit']['install_method'] == 'source')
+  bash "start_monit_on_boot" do
+    code "update-rc.d monit defaults"
+  end
+end
+
 service "monit" do
   action :enable
   supports [:start, :restart, :stop]
