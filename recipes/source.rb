@@ -15,7 +15,7 @@ remote_file monit_url do
   backup false
 end
 
-configure_flags = (node['monit']['source']['configure_flags'] && node['monit']['source']['configure_flags'].any?) ? node['monit']['source']['configure_flags'].join(" ") || ""
+configure_flags = (node['monit']['source']['configure_flags'] && node['monit']['source']['configure_flags'].any?) ? node['monit']['source']['configure_flags'].join(" ") : ""
 
 bash "compile_monit_source" do
   cwd ::File.dirname(src_filepath)
