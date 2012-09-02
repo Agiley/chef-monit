@@ -10,8 +10,8 @@ default[:monit][:source][:group]                    =   "root"
 default[:monit][:notify][:email]                    =   "notify@example.com"
 default[:monit][:notify][:options]                  =   "NOT ON { action, instance, pid, ppid }"
 
-default[:monit][:poll_period]                       =   60
-default[:monit][:poll_start_delay]                  =   120
+default[:monit][:polling][:period]                  =   60
+default[:monit][:polling][:start_delay]             =   120
 
 default[:monit][:mail_format][:subject]             =   "$SERVICE $EVENT"
 default[:monit][:mail_format][:from]                =   "monit@example.com"
