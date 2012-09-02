@@ -23,7 +23,7 @@ set mail-format {
   message: <%= @node[:monit][:mail_format][:message] %>
 }
 
-set alert <%= @node[:monit][:notify_email] %> NOT ON { action, instance, pid, ppid }
+set alert <%= @node[:monit][:notify][:email] %> <%= @node[:monit][:notify][:options] %>
 
 set httpd port <%= @node[:monit][:webserver][:port] %>
 <% if @node[:monit][:webserver][:bind_to_localhost] %>

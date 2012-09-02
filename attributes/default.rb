@@ -7,7 +7,8 @@ default[:monit][:source][:configure_flags]          =   nil
 default[:monit][:source][:user]                     =   "root"
 default[:monit][:source][:group]                    =   "root"
 
-default[:monit][:notify_email]                      =   "notify@example.com"
+default[:monit][:notify][:email]                    =   "notify@example.com"
+default[:monit][:notify][:options]                  =   "NOT ON { action, instance, pid, ppid }"
 
 default[:monit][:poll_period]                       =   60
 default[:monit][:poll_start_delay]                  =   120
