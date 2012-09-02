@@ -4,6 +4,8 @@
 
 # You must set this variable to for monit to start
 startup=1
+
+# Referenced in init.d-script
 START=yes
 
 # To change the intervals which monit should run,

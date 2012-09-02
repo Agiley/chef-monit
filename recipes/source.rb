@@ -17,7 +17,9 @@ remote_file monit_url do
   backup false
 end
 
-configure_flags = (node['monit']['source']['configure_flags'] && node['monit']['source']['configure_flags'].any?) ? node['monit']['source']['configure_flags'].join(" ") : ""
+configure_flags   =   (node['monit']['source']['configure_flags'] && node['monit']['source']['configure_flags'].any?) ? node['monit']['source']['configure_flags'].join(" ") : ""
+monit_user        =   (node['monit']['source']['user'])   ?   node['monit']['source']['user']   :   "root"
+monit_group       =   (node['monit']['source']['group'])  ?   node['monit']['source']['group']  :   "root"
 
 bash "compile_monit_source" do
   cwd ::File.dirname(src_filepath)
@@ -26,7 +28,9 @@ bash "compile_monit_source" do
     cd monit-#{node['monit']['version']} && ./configure #{configure_flags}
     make && make install
     mkdir -p /etc/monit/conf.d/
-    chown #{node['monit']['source']['user']}:#{node['monit']['source']['group']} /etc/default/monit
-    chown -R #{node['monit']['source']['user']}:#{node['monit']['source']['group']} /etc/monit
+    mkdir -p /var/log/monit/
+    chown #{monit_user}:#{monit_group} /etc/default/monit
+    chown -R #{monit_user}:#{monit_group} /etc/monit
+    chown -R #{monit_user}:#{monit_group} /var/log/monit
   EOH
 end
