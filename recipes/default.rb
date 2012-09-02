@@ -65,3 +65,7 @@ directory "/etc/monit/conf.d/" do
   action :create
   recursive true
 end
+
+service "monit" do
+  action :start
+end
