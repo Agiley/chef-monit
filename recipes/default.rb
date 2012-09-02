@@ -10,16 +10,6 @@ if platform?("ubuntu")
     group "root"
     mode 0644
   end
-
-  # Working init script, fix for: https://bugs.launchpad.net/ubuntu/+source/monit/+bug/993381
-  #if node.platform_version.to_f == 12.04
-  #  cookbook_file "/etc/init.d/monit" do
-  #    source "monit.init.sh"
-  #    owner "root"
-  #    group "root"
-  #    mode 0755
-  #  end
-  #end
   
   # Working init script, fix for: https://bugs.launchpad.net/ubuntu/+source/monit/+bug/993381
   if node.platform_version.to_f == 12.04
@@ -39,6 +29,19 @@ if (node['monit']['install_method'] == 'source')
       ln -s /etc/monit/monitrc /etc/monitrc
       update-rc.d monit defaults
     EOH
+  end
+end
+
+if (node['monit']['log'] && node['monit']['log'].include?('/'))
+  folder = File.dirname(node['monit']['log'])
+  
+  if (folder)
+    bash "create_log_directory" do
+      code <<-EOH
+        mkdir -p #{folder}
+        chown -R #{node['monit']['source']['user']}:#{node['monit']['source']['group']} #{folder}
+      EOH
+    end
   end
 end
 

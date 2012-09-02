@@ -28,9 +28,7 @@ bash "compile_monit_source" do
     cd monit-#{node['monit']['version']} && ./configure #{configure_flags}
     make && make install
     mkdir -p /etc/monit/conf.d/
-    mkdir -p /var/log/monit/
     chown #{monit_user}:#{monit_group} /etc/default/monit
     chown -R #{monit_user}:#{monit_group} /etc/monit
-    chown -R #{monit_user}:#{monit_group} /var/log/monit
   EOH
 end
