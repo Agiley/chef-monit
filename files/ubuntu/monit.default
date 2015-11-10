@@ -8,7 +8,9 @@ startup=1
 # Referenced in init.d-script
 START=yes
 
+# Options to pass to Monit
+#MONIT_OPTS=
+
 # To change the intervals which monit should run,
 # edit the configuration file /etc/monit/monitrc
 # It can no longer be configured here.
-
