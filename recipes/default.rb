@@ -43,16 +43,16 @@ node[:monit][:include_paths].each do |include_path|
   end
 end if node[:monit][:include_paths] && node[:monit][:include_paths].any?
 
+service "monit" do
+  action :enable
+  supports [:start, :restart, :stop]
+  provider platform?('ubuntu') ? find_provider : nil
+end
+
 template "/etc/monit/monitrc" do
   owner "root"
   group "root"
   mode 0700
   source 'monitrc.erb'
   notifies :restart, resources(:service => "monit"), :immediately
-end
-
-service "monit" do
-  action :enable
-  supports [:start, :restart, :stop]
-  provider platform?('ubuntu') ? find_provider : nil
 end
