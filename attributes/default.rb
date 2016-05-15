@@ -31,4 +31,4 @@ default[:monit][:webserver][:port]                  =   2812
 default[:monit][:webserver][:bind_to_localhost]     =   true
 default[:monit][:webserver][:allowed_connections]   =   ["localhost"]
 
-default[:monit][:include_paths]                     =   ["/etc/monit/conf.d/*.conf"]
+default[:monit][:include_paths]                     =   ["/etc/monit/conf.d/*.conf", "/etc/monit/conf-enabled/*"]
