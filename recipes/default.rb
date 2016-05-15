@@ -54,5 +54,5 @@ end
 service "monit" do
   action :enable
   supports [:start, :restart, :stop]
-  service_provider = platform?('ubuntu') ? find_provider : nil
+  provider platform?('ubuntu') ? find_provider : nil
 end
