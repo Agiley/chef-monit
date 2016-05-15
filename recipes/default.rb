@@ -3,33 +3,12 @@ case node['monit']['install_method']
   when 'package'  then  package "monit"
 end
 
-if platform?("ubuntu")
-  cookbook_file "/etc/default/monit" do
-    source "monit.default"
-    owner "root"
-    group "root"
-    mode 0644
-  end
-  
-  # Working init script, fix for: https://bugs.launchpad.net/ubuntu/+source/monit/+bug/993381
-  if node.platform_version.to_f == 12.04
-    template "/etc/init.d/monit" do
-      source 'init/monit.init.sh.erb'
-      owner "root"
-      group "root"
-      mode 0755
-    end
-  end
-end
-
-if (node['monit']['install_method'] == 'source')
-  bash "after_setup_tasks" do
-    code <<-EOH
-      rm -rf /etc/monitrc
-      ln -s /etc/monit/monitrc /etc/monitrc
-      update-rc.d monit defaults
-    EOH
-  end
+cookbook_file "/etc/default/monit" do
+  source "monit.default"
+  owner "root"
+  group "root"
+  mode 0644
+  only_if { platform?("ubuntu") }
 end
 
 if (node['monit']['log'] && node['monit']['log'].include?('/'))

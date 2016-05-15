@@ -32,3 +32,11 @@ bash "compile_monit_source" do
     chown -R #{monit_user}:#{monit_group} /etc/monit
   EOH
 end
+
+bash "after_setup_tasks" do
+  code <<-EOH
+    rm -rf /etc/monitrc
+    ln -s /etc/monit/monitrc /etc/monitrc
+    update-rc.d monit defaults
+  EOH
+end
