@@ -20,10 +20,10 @@ bash "create_log_directory" do
 end
 
 template "/etc/systemd/system/monit.service" do
-  source 'monit.systemd.conf.erb'
+  source 'systemd/monit.service.erb'
   owner 'root'
   group 'root'
-  mode 00744
+  mode 0644
   notifies :run, 'execute[systemctl daemon-reload]', :immediately
   only_if { platform?('ubuntu') && Chef::VersionConstraint.new('>= 15.04').include?(node['platform_version']) }
 end
