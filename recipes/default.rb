@@ -46,7 +46,7 @@ end if node[:monit][:include_paths] && node[:monit][:include_paths].any?
 service "monit" do
   action :enable
   supports [:start, :restart, :stop]
-  provider platform?('ubuntu') ? find_provider : nil
+  provider (platform?('ubuntu') && Chef::VersionConstraint.new('>= 15.04').include?(node['platform_version'])) ? Chef::Provider::Service::Systemd : nil
 end
 
 template "/etc/monit/monitrc" do
