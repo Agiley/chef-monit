@@ -1,4 +1,4 @@
-name             "Monit"
+name             "monit"
 maintainer       "Alex Soto"
 maintainer_email "apsoto@gmail.com"
 license          "MIT"
