@@ -48,7 +48,7 @@ service "monit" do
   supports [:start, :restart, :stop]
 end
 
-configure_mail_server = (!node[:monit][:mail][:server][:host].to_s.empty? && !node[:monit][:mail][:server][:port].nil? && node[:monit][:mail][:server][:port] > 0 && !node[:monit][:mail][:server][:username].to_s.empty? && !node[:monit][:mail][:server][:password].empty?)
+configure_mail_server = (!node[:monit][:mail][:server][:host].to_s.empty? && !node[:monit][:mail][:server][:port].nil? && node[:monit][:mail][:server][:port] > 0 && !node[:monit][:mail][:server][:username].to_s.empty? && !node[:monit][:mail][:server][:password].to_s.empty?)
 configure_mail_format = (!node[:monit][:mail][:format][:from].to_s.empty? && !node[:monit][:mail][:format][:subject].to_s.empty? && !node[:monit][:mail][:format][:message].to_s.empty?)
 
 template "/etc/monit/monitrc" do
