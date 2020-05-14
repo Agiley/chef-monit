@@ -46,13 +46,20 @@ end if node[:monit][:include_paths] && node[:monit][:include_paths].any?
 service "monit" do
   action :enable
   supports [:start, :restart, :stop]
-  provider (platform?('ubuntu') && Chef::VersionConstraint.new('>= 15.04').include?(node['platform_version'])) ? Chef::Provider::Service::Systemd : nil
 end
+
+configure_mail_server = (!node[:monit][:mailserver][:host].to_s.empty? && !node[:mail][:mailserver][:port].nil? && node[:mail][:mailserver][:port] > 0 && !node[:mail][:mailserver][:username].to_s.empty? && !node[:mail][:mailserver][:password].empty?)
+configure_mail_format = (!node[:monit][:mail_format][:from].to_s.empty? && !node[:monit][:mail_format][:subject].to_s.empty? && !node[:monit][:mail_format][:message].to_s.empty?)
 
 template "/etc/monit/monitrc" do
   owner "root"
   group "root"
   mode 0700
   source 'monitrc.erb'
-  notifies :restart, resources(:service => "monit"), :immediately
+  notifies :restart, resources(service: "monit"), :immediately
+  
+  variables(
+    configure_mail_server: configure_mail_server,
+    configure_mail_format: configure_mail_format
+  )
 end

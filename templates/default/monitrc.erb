@@ -1,44 +1,49 @@
-set daemon <%= @node[:monit][:polling][:period] %>
-<% if @node[:monit][:polling][:start_delay] && @node[:monit][:polling][:start_delay].to_i > 0 %>
-  with start delay <%= @node[:monit][:polling][:start_delay] %>
+set daemon <%= node[:monit][:polling][:period] %>
+<% if node[:monit][:polling][:start_delay] && node[:monit][:polling][:start_delay].to_i > 0 %>
+  with start delay <%= node[:monit][:polling][:start_delay] %>
 <% end %>
 
-set logfile <%= @node[:monit][:log] %>
-
-set mailserver <%= @node[:monit][:mailserver][:host] %><%= " port #{@node[:monit][:mailserver][:port]}" if @node[:monit][:mailserver][:port] %>
-<% if @node[:monit][:mailserver][:username] %>
-  username "<%= @node[:monit][:mailserver][:username] %>"
-<% end %>
-<% if @node[:monit][:mailserver][:password] %>
-  password "<%= @node[:monit][:mailserver][:password] %>"<%= " #{@node[:monit][:mailserver][:password_suffix]}" if @node[:monit][:mailserver][:password_suffix] %>
-<% end %>
+set logfile <%= node[:monit][:log] %>
 
 set eventqueue
     basedir /var/monit  # set the base directory where events will be stored
-#    slots 1000          # optionaly limit the queue size
+    #slots 1000         # optionaly limit the queue size
 
+<% if @configure_mail_server %>
+  set mailserver <%= node[:monit][:mailserver][:host] %><%= " port #{node[:monit][:mailserver][:port]}" if node[:monit][:mailserver][:port] %>
+  <% if node[:monit][:mailserver][:username] %>
+    username "<%= node[:monit][:mailserver][:username] %>"
+  <% end %>
+  <% if node[:monit][:mailserver][:password] %>
+    password "<%= node[:monit][:mailserver][:password] %>"<%= " #{node[:monit][:mailserver][:password_suffix]}" if node[:monit][:mailserver][:password_suffix] %>
+  <% end %>
+<% end -%>
+
+<% if @configure_mail_format %>
 set mail-format { 
-  from: <%= @node[:monit][:mail_format][:from] %>
-  subject: <%= @node[:monit][:mail_format][:subject] %>
-  message: <%= @node[:monit][:mail_format][:message] %>
+  from: <%= node[:monit][:mail_format][:from] %>
+  subject: <%= node[:monit][:mail_format][:subject] %>
+  message: <%= node[:monit][:mail_format][:message] %>
 }
+<% end -%>
 
-set alert <%= @node[:monit][:notify][:email] %> <%= @node[:monit][:notify][:options] %>
+<% if !node[:monit][:notify][:email].to_s.empty? %>
+set alert <%= node[:monit][:notify][:email] %> <%= node[:monit][:notify][:options] %>
+<% end -%>
 
-set httpd port <%= @node[:monit][:webserver][:port] %>
-<% if @node[:monit][:webserver][:bind_to_localhost] %>
+set httpd port <%= node[:monit][:webserver][:port] %>
+<% if node[:monit][:webserver][:bind_to_localhost] %>
   and use address localhost
 <% end %>
 
-<% if @node[:monit][:webserver][:allowed_connections] %>
-  <% @node[:monit][:webserver][:allowed_connections].each do |allowed_connection| %>
+<% if node[:monit][:webserver][:allowed_connections] %>
+  <% node[:monit][:webserver][:allowed_connections].each do |allowed_connection| %>
     allow <%= allowed_connection %>
   <% end %>
 <% end %>
 
-<% if @node[:monit][:include_paths] %>
-  <% @node[:monit][:include_paths].each do |include_path| %>
+<% if node[:monit][:include_paths] %>
+  <% node[:monit][:include_paths].each do |include_path| %>
     include <%= include_path %>
   <% end %>
 <% end %>
-
