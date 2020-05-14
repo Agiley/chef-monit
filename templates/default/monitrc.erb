@@ -7,23 +7,23 @@ set logfile <%= node[:monit][:log] %>
 
 set eventqueue
     basedir /var/monit  # set the base directory where events will be stored
-    #slots 1000         # optionaly limit the queue size
+#   slots 1000          # optionaly limit the queue size
 
 <% if @configure_mail_server %>
-  set mailserver <%= node[:monit][:mailserver][:host] %><%= " port #{node[:monit][:mailserver][:port]}" if node[:monit][:mailserver][:port] %>
-  <% if node[:monit][:mailserver][:username] %>
-    username "<%= node[:monit][:mailserver][:username] %>"
+  set mailserver <%= node[:monit][:mail][:server][:host] %><%= " port #{node[:monit][:mail][:server][:port]}" if node[:monit][:mail][:server][:port] %>
+  <% if node[:monit][:mail][:server][:username] %>
+    username "<%= node[:monit][:mail][:server][:username] %>"
   <% end %>
-  <% if node[:monit][:mailserver][:password] %>
-    password "<%= node[:monit][:mailserver][:password] %>"<%= " #{node[:monit][:mailserver][:password_suffix]}" if node[:monit][:mailserver][:password_suffix] %>
+  <% if node[:monit][:mail][:server][:password] %>
+    password "<%= node[:monit][:mail][:server][:password] %>"<%= " #{node[:monit][:mail][:server][:password_suffix]}" if node[:monit][:mail][:server][:password_suffix] %>
   <% end %>
 <% end -%>
 
 <% if @configure_mail_format %>
 set mail-format { 
-  from: <%= node[:monit][:mail_format][:from] %>
-  subject: <%= node[:monit][:mail_format][:subject] %>
-  message: <%= node[:monit][:mail_format][:message] %>
+  from: <%= node[:monit][:mail][:format][:from] %>
+  subject: <%= node[:monit][:mail][:format][:subject] %>
+  message: <%= node[:monit][:mail][:format][:message] %>
 }
 <% end -%>
 
