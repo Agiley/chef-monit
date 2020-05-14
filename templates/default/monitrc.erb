@@ -31,13 +31,13 @@ set mail-format {
 set alert <%= node[:monit][:notify][:email] %> <%= node[:monit][:notify][:options] %>
 <% end -%>
 
-set httpd port <%= node[:monit][:webserver][:port] %>
-<% if node[:monit][:webserver][:bind_to_localhost] %>
+set httpd port <%= node[:monit][:web][:port] %>
+<% if node[:monit][:web][:bind_to_localhost] %>
   and use address localhost
 <% end %>
 
-<% if node[:monit][:webserver][:allowed_connections] %>
-  <% node[:monit][:webserver][:allowed_connections].each do |allowed_connection| %>
+<% if node[:monit][:web][:allowed_connections] %>
+  <% node[:monit][:web][:allowed_connections].each do |allowed_connection| %>
     allow <%= allowed_connection %>
   <% end %>
 <% end %>
