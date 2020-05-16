@@ -32,24 +32,24 @@ execute 'systemctl daemon-reload' do
   action :nothing
 end
 
-node[:monit][:include_paths].each do |include_path|
-  directory include_path do
+node["monit"]["include_paths"].each do |include_path|
+  directory ::File.dirname(include_path) do
     owner  'root'
     group 'root'
     mode 0755
     action :create
     recursive true
-    not_if { ::File.exists?(include_path) }
+    not_if { ::File.exists?(::File.dirname(include_path)) }
   end
-end if node[:monit][:include_paths] && node[:monit][:include_paths].any?
+end if node["monit"]["include_paths"] && node["monit"]["include_paths"].any?
 
 service "monit" do
   action :enable
   supports [:start, :restart, :stop]
 end
 
-configure_mail_server = (!node[:monit][:mail][:server][:host].to_s.empty? && !node[:monit][:mail][:server][:port].nil? && node[:monit][:mail][:server][:port] > 0 && !node[:monit][:mail][:server][:username].to_s.empty? && !node[:monit][:mail][:server][:password].to_s.empty?)
-configure_mail_format = (!node[:monit][:mail][:format][:from].to_s.empty? && !node[:monit][:mail][:format][:subject].to_s.empty? && !node[:monit][:mail][:format][:message].to_s.empty?)
+configure_mail_server = (!node["monit"]["mail"]["server"]["host"].to_s.empty? && !node["monit"]["mail"]["server"]["port"].nil? && node["monit"]["mail"]["server"]["port"] > 0 && !node["monit"]["mail"]["server"]["username"].to_s.empty? && !node["monit"]["mail"]["server"]["password"].to_s.empty?)
+configure_mail_format = (!node["monit"]["mail"]["format"]["from"].to_s.empty? && !node["monit"]["mail"]["format"]["subject"].to_s.empty? && !node["monit"]["mail"]["format"]["message"].to_s.empty?)
 
 template "/etc/monit/monitrc" do
   owner "root"
