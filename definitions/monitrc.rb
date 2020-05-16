@@ -5,9 +5,23 @@
 # template_source: filename of the ERB configuration template, defaults to <LWRP Name>.conf.erb
 define :monitrc, action: :enable, reload: :delayed, variables: {}, template_cookbook: "monit", template_source: nil do
   params[:template_source] ||= "#{params[:name]}.conf.erb"
+  available_path  =   "/etc/monit/conf-available/#{params[:name]}.conf"
+  enabled_path    =   "/etc/monit/conf-enabled/#{params[:name]}.conf"
+  paths           =   [available_path, enabled_path]
   
-  if params[:action] == :enable  
-    template "/etc/monit/conf-available/#{params[:name]}.conf" do
+  if params[:action] == :enable
+    paths.each do |path|
+      directory ::File.dirname(path) do
+        owner  'root'
+        group 'root'
+        mode 0755
+        action :create
+        recursive true
+        not_if { ::File.exists?(::File.dirname(path)) }
+      end
+    end
+    
+    template available_path do
       owner "root"
       group "root"
       mode 0644
@@ -17,15 +31,14 @@ define :monitrc, action: :enable, reload: :delayed, variables: {}, template_cook
       action :create
     end
     
-    link "/etc/monit/conf-available/#{params[:name]}.conf" do
-      to "/etc/monit/conf-enabled/#{params[:name]}.conf"
+    link available_path do
+      to enabled_path
       notifies :restart, resources(service: "monit"), params[:reload]
     end
     
   else
-    paths = ["/etc/monit/conf-available/#{params[:name]}.conf", "/etc/monit/conf-enabled/#{params[:name]}.conf"]
-    paths.each_with_index do |path, index|
-      template "/etc/monit/conf.d/#{params[:name]}.conf" do
+    paths.each do |path|
+      template path do
         action :delete
         notifies :restart, resources(service: "monit"), params[:reload]
       end
