@@ -28,6 +28,7 @@ directories           =   [
 directories.each do |dir|
   directory dir do
     action :delete
+    recursive true
     only_if { ::File.exists?(dir) }
   end
   
