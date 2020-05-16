@@ -16,21 +16,21 @@ include <%= include_path %>
 <% end %>
 
 <% if @configure_mail_server %>
-  set mailserver <%= node["monit"]["mail"]["server"]["host"] %><%= " port #{node["monit"]["mail"]["server"]["port"]}" if node["monit"]["mail"]["server"]["port"] %>
-  <% if node["monit"]["mail"]["server"]["username"] %>
-    username "<%= node["monit"]["mail"]["server"]["username"] %>"
-  <% end %>
-  <% if node["monit"]["mail"]["server"]["password"] %>
-    password "<%= node["monit"]["mail"]["server"]["password"] %>"<%= " #{node["monit"]["mail"]["server"]["password_suffix"]}" if node["monit"]["mail"]["server"]["password_suffix"] %>
-  <% end %>
-  
-  <% if @configure_mail_format %>
-  set mail-format { 
-    from: <%= node["monit"]["mail"]["format"]["from"] %>
-    subject: <%= node["monit"]["mail"]["format"]["subject"] %>
-    message: <%= node["monit"]["mail"]["format"]["message"] %>
-  }
-  <% end -%>
+set mailserver <%= node["monit"]["mail"]["server"]["host"] %><%= " port #{node["monit"]["mail"]["server"]["port"]}" if node["monit"]["mail"]["server"]["port"] %>
+<% if node["monit"]["mail"]["server"]["username"] %>
+  username "<%= node["monit"]["mail"]["server"]["username"] %>"
+<% end %>
+<% if node["monit"]["mail"]["server"]["password"] %>
+  password "<%= node["monit"]["mail"]["server"]["password"] %>"<%= " #{node["monit"]["mail"]["server"]["password_suffix"]}" if node["monit"]["mail"]["server"]["password_suffix"] %>
+<% end %>
+
+<% if @configure_mail_format %>
+set mail-format { 
+  from: <%= node["monit"]["mail"]["format"]["from"] %>
+  subject: <%= node["monit"]["mail"]["format"]["subject"] %>
+  message: <%= node["monit"]["mail"]["format"]["message"] %>
+}
+<% end -%>
 <% end -%>
 
 <% if !node["monit"]["notify"]["email"].to_s.empty? %>
