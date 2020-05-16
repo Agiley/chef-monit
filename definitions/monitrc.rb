@@ -31,8 +31,8 @@ define :monitrc, action: :enable, reload: :delayed, variables: {}, template_cook
       action :create
     end
     
-    link available_path do
-      to enabled_path
+    link enabled_path do
+      to available_path
       notifies :restart, resources(service: "monit"), params[:reload]
     end
     
