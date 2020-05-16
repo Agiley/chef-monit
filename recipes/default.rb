@@ -19,17 +19,26 @@ bash "create_log_directory" do
   only_if { node['monit']['log'] && node['monit']['log'].include?('/')}
 end
 
-template "/etc/systemd/system/monit.service" do
-  source 'systemd/monit.service.erb'
-  owner 'root'
-  group 'root'
-  mode 0644
-  notifies :run, 'execute[systemctl daemon-reload]', :immediately
-  only_if { platform?('ubuntu') && Chef::VersionConstraint.new('>= 15.04').include?(node['platform_version']) }
-end
+# Clear out old directories if they exist and already have samples etc in them
+directories           =   [
+  node["monit"]["config"]["available_path"],
+  node["monit"]["config"]["enabled_path"]
+]
 
-execute 'systemctl daemon-reload' do
-  action :nothing
+directories.each do |dir|
+  directory dir do
+    action :delete
+    only_if { ::File.exists?(dir) }
+  end
+  
+  directory dir do
+    owner  'root'
+    group 'root'
+    mode 0755
+    action :create
+    action :create
+    not_if { ::File.exists?(dir) }
+  end
 end
 
 node["monit"]["include_paths"].each do |include_path|
@@ -42,6 +51,19 @@ node["monit"]["include_paths"].each do |include_path|
     not_if { ::File.exists?(::File.dirname(include_path)) }
   end
 end if node["monit"]["include_paths"] && node["monit"]["include_paths"].any?
+
+template "/etc/systemd/system/monit.service" do
+  source 'systemd/monit.service.erb'
+  owner 'root'
+  group 'root'
+  mode 0644
+  notifies :run, 'execute[systemctl daemon-reload]', :immediately
+  only_if { platform?('ubuntu') && Chef::VersionConstraint.new('>= 15.04').include?(node['platform_version']) }
+end
+
+execute 'systemctl daemon-reload' do
+  action :nothing
+end
 
 service "monit" do
   action :enable

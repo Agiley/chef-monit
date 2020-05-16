@@ -31,4 +31,9 @@ default["monit"]["web"]["port"]                           =   2812
 default["monit"]["web"]["bind_to_localhost"]              =   true
 default["monit"]["web"]["allowed_connections"]            =   ["localhost"]
 
-default["monit"]["include_paths"]                         =   ["/etc/monit/conf-enabled/*.conf"]
+default["monit"]["config"]["available_path"]              =   "/etc/monit/conf-available"
+default["monit"]["config"]["enabled_path"]                =   "/etc/monit/conf-enabled"
+
+default["monit"]["include_paths"]                         =   [
+  "/etc/monit/conf-enabled/*.conf"
+]

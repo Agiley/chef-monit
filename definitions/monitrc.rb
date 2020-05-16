@@ -10,17 +10,6 @@ define :monitrc, action: :enable, reload: :delayed, variables: {}, template_cook
   paths           =   [available_path, enabled_path]
   
   if params[:action] == :enable
-    paths.each do |path|
-      directory ::File.dirname(path) do
-        owner  'root'
-        group 'root'
-        mode 0755
-        action :create
-        recursive true
-        not_if { ::File.exists?(::File.dirname(path)) }
-      end
-    end
-    
     template available_path do
       owner "root"
       group "root"
