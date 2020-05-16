@@ -19,10 +19,10 @@ include <%= include_path %>
 set mailserver <%= node["monit"]["mail"]["server"]["host"] %><%= " port #{node["monit"]["mail"]["server"]["port"]}" if node["monit"]["mail"]["server"]["port"] %>
 <% if node["monit"]["mail"]["server"]["username"] %>
   username "<%= node["monit"]["mail"]["server"]["username"] %>"
-<% end %>
+<% end -%>
 <% if node["monit"]["mail"]["server"]["password"] %>
   password "<%= node["monit"]["mail"]["server"]["password"] %>"<%= " #{node["monit"]["mail"]["server"]["password_suffix"]}" if node["monit"]["mail"]["server"]["password_suffix"] %>
-<% end %>
+<% end -%>
 
 <% if @configure_mail_format %>
 set mail-format { 
